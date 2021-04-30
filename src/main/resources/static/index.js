@@ -6,8 +6,14 @@ $(() => {
     $("#slettAlle").click(() => {
         $.post("/mVogn/slettAlle", () => {
             visData();
+        }) // ikke semikolon, og ikke dollartegn
+        .fail(function (jqXHR) {
+            const json = $.parseJSON(jqXHR.responseText);
+            console.log(json.message);
+            $("#feil").html(json.message);
         });
     });
+
 });
 
 // funksjoner som brukes mer under her
@@ -45,5 +51,10 @@ function slettEn(reg) {
     let url = "/mVogn/slettEn?reg=" + reg;
     $.get(url, () => {
         visData()
+    })
+    .fail(function (jqXHR) {
+        const json = $.parseJSON(jqXHR.responseText);
+        console.log(json.message);
+        $("#feil").html(json.message);
     });
 }

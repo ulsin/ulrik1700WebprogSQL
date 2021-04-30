@@ -25,6 +25,11 @@ $(function () {
 
         $.post("/mVogn/endreEnVogn", bilObj, function () {
             window.location.href = "index.html";
-        });
+        })
+            .fail(function (jqXHR) {
+                const json = $.parseJSON(jqXHR.responseText);
+                console.log(json.message);
+                $("#feil").html(json.message);
+            });
     });
 });

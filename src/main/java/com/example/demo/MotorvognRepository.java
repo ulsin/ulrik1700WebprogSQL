@@ -1,6 +1,8 @@
 package com.example.demo;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,44 +17,90 @@ public class MotorvognRepository {
     @Autowired
     private JdbcTemplate db;
 
-    public void save(Motorvogn vogn) {
-        String sql = "insert into Motorvogner(personNr, navn, adresse, regNr, merke, biltype) " +
-                "values(?, ?, ?, ?, ?, ?)";
-        db.update(sql, vogn.getPersonNr(), vogn.getNavn(), vogn.getAdresse(), vogn.getRegNr(), vogn.getMerke(), vogn.getBiltype());
+    private Logger logger = LoggerFactory.getLogger(MotorvognRepository.class);
+
+    public boolean save(Motorvogn vogn) {
+        String sql = "insert into Motorvogner(personNr, navn, adresse, regNr, merke, biltype) " + "values(?, ?, ?, ?, ?, ?)";
+        try {
+            db.update(sql, vogn.getPersonNr(), vogn.getNavn(), vogn.getAdresse(), vogn.getRegNr(), vogn.getMerke(), vogn.getBiltype());
+            return true;
+        } catch (Exception e) {
+            logger.error("Feil i repo lagring" + e);
+            return false;
+        }
     }
 
-    public void slettAlle(Motorvogn vogn) {
+    public boolean slettAlle() {
         String sql = "delete from Motorvogner";
-        db.update(sql);
+//        String sql = "delete from Motorvognerrrrr"; // for error
+        try {
+            db.update(sql);
+            return true;
+        } catch (Exception e) {
+            logger.error("Feil i repo slett alle" + e);
+            return false;
+        }
     }
 
-    public void slettEn(String reg) {
+    public boolean slettEn(String reg) {
         String sql = "delete from Motorvogner where regNr = ?";
-        db.update(sql, reg);
+        //TODO bytt til if statesments basert på om objektet finnes eller ikke, akkurat nå catcher den ikke feil riktig
+        try {
+            db.update(sql, reg);
+            return true;
+        } catch (Exception e) {
+            logger.error("Feil i repo slett en" + e);
+            return false;
+        }
     }
 
     public List<Motorvogn> getVogner() {
         String sql = "select * from Motorvogner";
-        return db.query(sql, new BeanPropertyRowMapper<>(Motorvogn.class));
+        try {
+            return db.query(sql, new BeanPropertyRowMapper<>(Motorvogn.class));
+        } catch (Exception e) {
+            logger.error("Feil i repo getVogner" + e);
+            return null;
+        }
     }
 
     public Motorvogn getEnVogn(String reg) {
         System.out.println("Er i Repo");
         System.out.println(reg);
         String sql = "select * from Motorvogner where regNr = ?";
-        return db.queryForObject(sql, BeanPropertyRowMapper.newInstance(Motorvogn.class), reg);
+
+        try {
+            return db.queryForObject(sql, BeanPropertyRowMapper.newInstance(Motorvogn.class), reg);
+
+        } catch (Exception e) {
+            logger.error("Feil i getEnVogn" + e);
+            return null;
+        }
+
     }
 
-    public void updateVogn(Motorvogn vogn) {
+    public boolean updateVogn(Motorvogn vogn) {
         String sql = "update Motorvogner set personNr=?, navn=?, adresse=?, merke=?, biltype=? where regNr = ?";
-        db.update(sql, vogn.getPersonNr(), vogn.getNavn(), vogn.getAdresse(), vogn.getMerke(), vogn.getBiltype(), vogn.getRegNr());
+        try {
+            db.update(sql, vogn.getPersonNr(), vogn.getNavn(), vogn.getAdresse(), vogn.getMerke(), vogn.getBiltype(), vogn.getRegNr());
+            return true;
+        } catch (Exception e) {
+            logger.error("Feil i repo updateVogn" + e);
+            return false;
+        }
     }
 
     // Biler tabellen
     public List<Bil> getBiler() {
         String sql = "select * from Biler order by merke, modell";
 //        String sql = "select * from Biler";
-        return db.query(sql, new BeanPropertyRowMapper<>(Bil.class));
+        try {
+            return db.query(sql, new BeanPropertyRowMapper<>(Bil.class));
+
+        } catch (Exception e) {
+            logger.error("Feil i repo getBiler" + e);
+            return null;
+        }
     }
 
 //    public List<Bil> getMerker() {

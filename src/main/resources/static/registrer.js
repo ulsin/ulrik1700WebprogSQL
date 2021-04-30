@@ -14,7 +14,12 @@ $(() => {
 
         $.post("/mVogn/save", bilObj, () => {
             window.location.href = "/"; // tar deg tilbake til index .html
-        });
+        })
+            .fail(function (jqXHR) {
+                const json = $.parseJSON(jqXHR.responseText);
+                console.log(json.message);
+                $("#feil").html(json.message);
+            });
     });
 });
 
@@ -38,7 +43,12 @@ function genererMerker() {
         $("#merke").html(utMerker)
 
         hentTyper();
-    });
+    })
+        .fail(function (jqXHR) {
+            const json = $.parseJSON(jqXHR.responseText);
+            console.log(json.message);
+            $("#feil").html(json.message);
+        });
 }
 
 function hentTyper() {
@@ -55,5 +65,10 @@ function hentTyper() {
         }
 
         $("#biltype").html(utTyper);
-    });
+    })
+        .fail(function (jqXHR) {
+            const json = $.parseJSON(jqXHR.responseText);
+            console.log(json.message);
+            $("#feil").html(json.message);
+        });
 }
