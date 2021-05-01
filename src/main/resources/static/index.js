@@ -1,4 +1,5 @@
 //TODO fix input validation??
+
 $(() => {
     visData() // henter data fra "server" når siden er lastet
 

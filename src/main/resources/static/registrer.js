@@ -1,6 +1,10 @@
 $(() => {
     genererMerker(); //generer merker fra server, og genrerer da også typer
 
+/*    $("#personNr").on("change", () => {
+        validering.personNr();
+    });*/
+
     //venter på registrerings knappen
     $("#registrer").click(() => {
         const bilObj = {
@@ -12,20 +16,23 @@ $(() => {
             biltype: $("#biltype").val()
         }
 
-        $.post("/mVogn/save", bilObj, () => {
-            window.location.href = "/"; // tar deg tilbake til index .html
-        })
-            .fail(function (jqXHR) {
-                const json = $.parseJSON(jqXHR.responseText);
-                console.log(json.message);
-                $("#feil").html(json.message);
-            });
+        if (nullfeil()) {
+            $.post("/mVogn/save", bilObj, () => {
+                window.location.href = "/"; // tar deg tilbake til index .html
+            })
+                .fail(function (jqXHR) {
+                    const json = $.parseJSON(jqXHR.responseText);
+                    console.log(json.message);
+                    $("#feil").html(json.message);
+                });
+        }
     });
 });
 
 function genererMerker() {
     $.get("/mVogn/getBiler", function (biler) {
         let utMerker = ""
+        utMerker += "<option>Velg merke</option>";
         let gammelMerke = "";
         let merkeArray = []
 
@@ -51,16 +58,25 @@ function genererMerker() {
         });
 }
 
+function typeChange() {
+    validerType()
+    hentTyper();
+}
+
 function hentTyper() {
     $.get("/mVogn/getBiler", function (biler) {
         let valgtMerke = $("#merke").val();
         let utTyper = "";
         console.log(valgtMerke);
 
-        for (const b of biler) {
-            if (valgtMerke === b.merke) {
-                utTyper += "<option>" + b.modell + "</option>";
-
+        if (valgtMerke === "Velg merke") {
+            utTyper += "<option>Velg merke for å se typer</option>";
+        } else {
+            utTyper += "<option>Velg type</option>";
+            for (const b of biler) {
+                if (valgtMerke === b.merke) {
+                    utTyper += "<option>" + b.modell + "</option>";
+                }
             }
         }
 
@@ -71,4 +87,5 @@ function hentTyper() {
             console.log(json.message);
             $("#feil").html(json.message);
         });
+
 }

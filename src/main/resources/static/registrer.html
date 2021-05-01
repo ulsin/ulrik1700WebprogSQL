@@ -6,8 +6,9 @@
     <title>Registrer</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <script src="index.js"></script>
+<!--    <script src="index.js"></script>-->
     <script src="registrer.js"></script>
+    <script src="validering.js"></script>
 </head>
 <body>
 <div class="container">
@@ -17,28 +18,39 @@
             <form class="form">
                 <div class ='form-group'>
                     <label for="personNr">PersonNr</label>
-                    <input class="form-control" type="text" id="personNr">
+                    <input class="form-control" type="text" id="personNr" onchange="validerPersonNr()">
+                    <div id="personNrError" style="color: red"></div>
                 </div>
                 <div class ='form-group'>
                     <label for="navn">Navn</label>
-                    <input class="form-control" type="text" id="navn">
+                    <input class="form-control" type="text" id="navn" onchange="validerNavn()">
+                    <div id="navnError" style="color: red"></div>
                 </div>
                 <div class ='form-group'>
                     <label for="adresse">Adresse</label>
-                    <input class="form-control" type="text" id="adresse">
+                    <input class="form-control" type="text" id="adresse" onchange="validerAdresse()">
+                    <div id="adresseError" style="color: red"></div>
                 </div>
                 <div class="form-group">
-                    <label for="regNr">RegNr</label><input class="form-control" type="text" id="regNr">
+                    <label for="regNr">RegNr</label>
+                    <input class="form-control" type="text" id="regNr" onchange="validerRegNr()">
+                    <div id="regNrError" style="color: red"></div>
                 </div>
                 <div class="form-group">
+                    <!-- Gjør validering kun når button presses -->
                     <label for="merke">Merke</label><select class="form-control" id="merke" onchange="hentTyper()"></select>
+                    <div id="merkeError" style="color: red"></div>
+
                 </div>
                 <div class="form-group">
                     <label for="biltype">Biltype</label><select class="form-control" id="biltype"></select>
+                    <div id="typeError" style="color: red"></div>
+
                 </div>
             </form>
             <input type="button" id="registrer" class="btn btn-primary" value="Registrer">
             <a type="button" id="tilbake" class="btn btn-danger" href="index.html">Tilbake</a>
+            <div id="regError" style="color: red"></div>
         </div>
     </div>
 </div>
