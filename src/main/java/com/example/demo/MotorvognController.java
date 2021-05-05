@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -20,13 +23,49 @@ public class MotorvognController {
     @Autowired
     MotorvognRepository repo;
 
+    @Autowired
+    HttpSession session;
+
+    private final Logger logger = LoggerFactory.getLogger(MotorvognController.class);
+
+    @PostMapping("/login")
+    public void login(Bruker bruker, HttpServletResponse response) throws IOException {
+        if (!repo.login(bruker)) { //her kjøres funksjonen for å teste, så trenger ikke kjøre den separat
+            //TODO sender ikke error riktig
+            response.sendError(500, "Brukernavn eller passord stemte ikke");
+        } else {
+            session.setAttribute("innLogget", bruker);
+        }
+    }
+
+    @PostMapping("/logut")
+    public void logUt() {
+        session.removeAttribute("innLogget");
+    }
+
+    @PostMapping("/sjekkBruker")
+    public void skjekkBrukerPost(HttpServletResponse response) throws IOException {
+        if (session.getAttribute("innLogget") == null) {
+            response.sendError(500, "Er ikke innlogget");
+        }
+    }
+
+    @GetMapping("/sjekkBruker")
+    public boolean skjekkBruker() {
+        return session.getAttribute("innLogget") != null;
+    }
+
     // Vet ikke helt hvor response argumentet kommer ifra, men er vel noe Spring gjør eller noe
     @PostMapping("/save")
     public void save(Motorvogn vogn, HttpServletResponse response) throws IOException {
-        if (!repo.save(vogn)) {
-            // kunne bare skrevet 500 som første input
-            response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Feil i save controller");
-        }
+
+        if (Validering.validerVogn(vogn, logger)) {
+            if (!repo.save(vogn)) {
+                // kunne bare skrevet 500 som første input
+                response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Feil i save controller");
+            }
+        } // trenger ikke else siden validerVogn sender error selv via logger objektet som settes inn
+
     }
 
     @PostMapping("/slettAlle")
@@ -38,8 +77,10 @@ public class MotorvognController {
 
     @PostMapping("/endreEnVogn")
     public void endreEn(Motorvogn vogn, HttpServletResponse response) throws IOException {
-        if (!repo.updateVogn(vogn)) {
-            response.sendError(500,"Feil Controller endreEnVogn");
+        if (Validering.validerVogn(vogn, logger)) {
+            if (!repo.updateVogn(vogn)) {
+                response.sendError(500,"Feil Controller endreEnVogn");
+            }
         }
     }
 

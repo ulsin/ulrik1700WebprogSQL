@@ -18,3 +18,10 @@ create table Biler
     merke varchar(10) not null,
     modell varchar(20) not null
 );
+
+create table Bruker
+(
+    navn varchar(15),
+    passord varchar(15),
+    primary key (navn)
+)

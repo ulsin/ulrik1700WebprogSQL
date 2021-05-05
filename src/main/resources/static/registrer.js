@@ -7,25 +7,31 @@ $(() => {
 
     //venter på registrerings knappen
     $("#registrer").click(() => {
-        const bilObj = {
-            personNr: $("#personNr").val(),
-            navn: $("#navn").val(),
-            adresse: $("#adresse").val(),
-            regNr: $("#regNr").val(),
-            merke: $("#merke").val(),
-            biltype: $("#biltype").val()
-        }
+        $.get("/mVogn/sjekkBruker", bool => {
+            if (bool) {
+                const bilObj = {
+                    personNr: $("#personNr").val(),
+                    navn: $("#navn").val(),
+                    adresse: $("#adresse").val(),
+                    regNr: $("#regNr").val(),
+                    merke: $("#merke").val(),
+                    biltype: $("#biltype").val()
+                };
 
-        if (nullfeil()) {
-            $.post("/mVogn/save", bilObj, () => {
-                window.location.href = "/"; // tar deg tilbake til index .html
-            })
-                .fail(function (jqXHR) {
-                    const json = $.parseJSON(jqXHR.responseText);
-                    console.log(json.message);
-                    $("#feil").html(json.message);
-                });
-        }
+                if (nullfeil()) {
+                    $.post("/mVogn/save", bilObj, () => {
+                        window.location.href = "/"; // tar deg tilbake til index .html
+                    })
+                        .fail(function (jqXHR) {
+                            const json = $.parseJSON(jqXHR.responseText);
+                            console.log(json.message);
+                            $("#feil").html(json.message);
+                        });
+                }
+            } else {
+                $("#feil").html("Er ikke logget inn");
+            }
+        });
     });
 });
 
@@ -58,10 +64,12 @@ function genererMerker() {
         });
 }
 
+/*
 function typeChange() {
     validerType()
     hentTyper();
 }
+*/
 
 function hentTyper() {
     $.get("/mVogn/getBiler", function (biler) {

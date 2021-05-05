@@ -19,15 +19,18 @@
                 <input type="hidden" id="regNr"/>
                 <div class ='form-group'>
                     <label for="personNr">PersonNr</label>
-                    <input class="form-control" type="text" id="personNr">
+                    <input class="form-control" type="text" id="personNr" onchange="validerPersonNr()">
+                    <div id="personNrError" style="color: red"></div>
                 </div>
                 <div class ='form-group'>
                     <label for="navn">Navn</label>
-                    <input class="form-control" type="text" id="navn">
+                    <input class="form-control" type="text" id="navn" onchange="validerNavn()">
+                    <div id="navnError" style="color: red"></div>
                 </div>
                 <div class ='form-group'>
                     <label for="adresse">Adresse</label>
-                    <input class="form-control" type="text" id="adresse">
+                    <input class="form-control" type="text" id="adresse" onchange="validerAdresse()">
+                    <div id="adresseError" style="color: red"></div>
                 </div>
                 <div class="form-group">
                     <label for="merke">Merke</label><select class="form-control" id="merke" onchange="hentTyper()"></select>
@@ -38,6 +41,7 @@
             </form>
             <input type="button" id="endre" class="btn btn-primary" value="Endre">
             <a type="button" id="tilbake" class="btn btn-danger" href="index.html">Tilbake</a>
+            <div class="col-md-10" id="feil" style="color: red"></div>
         </div>
     </div>
 </div>

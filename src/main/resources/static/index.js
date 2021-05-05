@@ -1,17 +1,42 @@
 //TODO fix input validation??
 
 $(() => {
+    // console.log($.cookie('JSESIONID'));
+
     visData() // henter data fra "server" når siden er lastet
 
     // venter på slett knappen
     $("#slettAlle").click(() => {
-        $.post("/mVogn/slettAlle", () => {
-            visData();
-        }) // ikke semikolon, og ikke dollartegn
-        .fail(function (jqXHR) {
-            const json = $.parseJSON(jqXHR.responseText);
-            console.log(json.message);
-            $("#feil").html(json.message);
+        $.get("/mVogn/sjekkBruker", (bool) => {
+            if (bool) {
+                $.post("/mVogn/slettAlle", () => {
+                    visData();
+                }) // ikke semikolon, og ikke dollartegn
+                    .fail(function (jqXHR) {
+                        $("#feil").html($.parseJSON(jqXHR.responseText).message);
+                    });
+            } else {
+                $("#feil").html("Er ikke logget inn");
+            }
+        });
+    });
+
+    $("#registrer").click(() => {
+        $.post("mVogn/sjekkBruker", () => {
+            window.location.href = "/registrer.html";
+        })
+            .fail(function (jqXHR) {
+                $("#feil").html($.parseJSON(jqXHR.responseText).message);
+            });
+    });
+
+    $("#logut").click(() => {
+        $.get("/mVogn/sjekkBruker", bool => {
+            if (bool) {
+                $.post("mVogn/logut");
+            } else {
+                $("#feil").html("Er ikke logget inn");
+            }
         });
     });
 
@@ -35,8 +60,8 @@ function formaterData(data) {
                     "<td>" + d.personNr + "</td><td>" + d.navn + "</td>" +
                     "<td>" + d.adresse + "</td><td>" + d.regNr + "</td>" +
                     "<td>" + d.merke + "</td><td>" + d.biltype + "</td>" +
-                    // "<td><input type='button' onclick='endre( \"" + d.regNr + "\")' class='btn btn-primary' value='Endre'></td>" +
-                    "<td><a type='button' href='endre.html?reg=" + d.regNr + "' class='btn btn-primary'>Endre</a></td>" +
+                    "<td><input type='button' onclick='endreEn( \"" + d.regNr + "\")' class='btn btn-primary' value='Endre'></td>" +
+                    // "<td><a type='button' href='endre.html?reg=" + d.regNr + "' class='btn btn-primary'>Endre</a></td>" +
                     // the string magic within slettEn() makes it work, do not touch, ask Ana (think it has to be turned into a string upon input)
                     "<td><input type='button' onclick='slettEn( \"" + d.regNr + "\")' class='btn btn-danger' value='Slett'></td>" +
                 "</tr>";
@@ -48,14 +73,32 @@ function formaterData(data) {
 }
 
 function slettEn(reg) {
-    console.log(reg);
-    let url = "/mVogn/slettEn?reg=" + reg;
-    $.get(url, () => {
-        visData()
-    })
-    .fail(function (jqXHR) {
-        const json = $.parseJSON(jqXHR.responseText);
-        console.log(json.message);
-        $("#feil").html(json.message);
+    $.get("/mVogn/sjekkBruker", bool => {
+        if (bool) {
+            console.log(reg);
+            let url = "/mVogn/slettEn?reg=" + reg;
+            $.get(url, () => {
+                visData()
+            })
+                .fail(function (jqXHR) {
+                    const json = $.parseJSON(jqXHR.responseText);
+                    console.log(json.message);
+                    $("#feil").html(json.message);
+                });
+        } else {
+            $("#feil").html("Er ikke logget inn");
+        }
+    });
+
+}
+
+function endreEn(reg) {
+    $.get("/mVogn/sjekkBruker", bool => {
+        if (bool) {
+            window.location.href = "/endre.html?reg=" + reg;
+        } else {
+            $("#feil").html("Er ikke logget inn");
+        }
     });
 }
+

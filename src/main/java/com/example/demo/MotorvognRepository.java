@@ -17,7 +17,19 @@ public class MotorvognRepository {
     @Autowired
     private JdbcTemplate db;
 
-    private Logger logger = LoggerFactory.getLogger(MotorvognRepository.class);
+    private final Logger logger = LoggerFactory.getLogger(MotorvognRepository.class);
+
+    public boolean login(Bruker bruker) {
+        String sql = "select * from Bruker where navn = ?";
+        Bruker dbBruker = db.queryForObject(sql, new BeanPropertyRowMapper<>(Bruker.class), bruker.getNavn());
+        try {
+            return (dbBruker.getNavn().equals(bruker.getNavn()) && dbBruker.getPassord().equals(bruker.getPassord()));
+        } catch (Exception e) {
+            logger.error("Feil i repo login " + e);
+            return false;
+        }
+
+    }
 
     public boolean save(Motorvogn vogn) {
         String sql = "insert into Motorvogner(personNr, navn, adresse, regNr, merke, biltype) " + "values(?, ?, ?, ?, ?, ?)";
