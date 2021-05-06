@@ -41,6 +41,11 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <!-- Added denne fra Erik sin Repo -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 
     <!--TODO skjekk om denne egt trengs om du begynner med postgre-->
 

@@ -40,6 +40,11 @@ $(() => {
         });
     });
 
+    $("#encrypt").click(() => {
+        // do stuff
+        $.post("/mVogn/encrypt");
+    });
+
 });
 
 // funksjoner som brukes mer under her

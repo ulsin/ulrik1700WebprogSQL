@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,11 @@ public class MotorvognController {
     HttpSession session;
 
     private final Logger logger = LoggerFactory.getLogger(MotorvognController.class);
+
+    @PostMapping("/encrypt")
+    public void passEncrypt() {
+        repo.passEncrypt();
+    }
 
     @PostMapping("/login")
     public void login(Bruker bruker, HttpServletResponse response) throws IOException {
@@ -55,6 +61,7 @@ public class MotorvognController {
         return session.getAttribute("innLogget") != null;
     }
 
+    //TODO spør om dette??
     // Vet ikke helt hvor response argumentet kommer ifra, men er vel noe Spring gjør eller noe
     @PostMapping("/save")
     public void save(Motorvogn vogn, HttpServletResponse response) throws IOException {

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,12 +19,33 @@ public class MotorvognRepository {
     private JdbcTemplate db;
 
     private final Logger logger = LoggerFactory.getLogger(MotorvognRepository.class);
+    private final BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder(5); // strong enough
+
+
+    public void passEncrypt() {
+        String sql = "select * from Bruker";
+
+        try {
+            List<Bruker> userList = db.query(sql, new BeanPropertyRowMapper<>(Bruker.class));
+
+            for (Bruker b : userList) {
+                // TODO spør hvorfor vi ikke gjør dette
+                // kunne ha brukt kryptering klassen men vil se om det funker yeet
+                db.update("update Bruker set passord =? where navn = ?", bCrypt.encode(b.getPassord()), b.getNavn());
+            }
+        } catch (Exception e) {
+            logger.error("Feil i repo db encrypt " + e);
+        }
+    }
 
     public boolean login(Bruker bruker) {
         String sql = "select * from Bruker where navn = ?";
         Bruker dbBruker = db.queryForObject(sql, new BeanPropertyRowMapper<>(Bruker.class), bruker.getNavn());
         try {
-            return (dbBruker.getNavn().equals(bruker.getNavn()) && dbBruker.getPassord().equals(bruker.getPassord()));
+            //TODO fikk ikke login til å poste error riktig
+
+            // husk å bruke matches, du kan ikke bruke equals her fordi lik input gir ikke lik output med encode
+            return (dbBruker.getNavn().equals(bruker.getNavn()) && bCrypt.matches(bruker.getPassord(), dbBruker.getPassord()));
         } catch (Exception e) {
             logger.error("Feil i repo login " + e);
             return false;

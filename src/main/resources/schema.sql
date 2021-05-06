@@ -22,6 +22,6 @@ create table Biler
 create table Bruker
 (
     navn varchar(15),
-    passord varchar(15),
+    passord varchar(255),
     primary key (navn)
 )
