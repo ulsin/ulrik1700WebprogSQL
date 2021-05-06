@@ -19,4 +19,4 @@ values ('AE861984SOY', 'Takumi', 'Mt. Akina', '13-954', 'Toyota', 'Trueno'),
        ('spoilerFD3S', 'Keisuke', 'Rotarytown', '63-887', 'Mazda', 'RX7');
 
 insert into Bruker(navn, passord)
-values ('bunta', 'tofutofu');
+values ('bunta', 'tofutofu86');
