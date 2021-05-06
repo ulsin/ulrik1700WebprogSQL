@@ -40,12 +40,18 @@ public class MotorvognRepository {
 
     public boolean login(Bruker bruker) {
         String sql = "select * from Bruker where navn = ?";
-        Bruker dbBruker = db.queryForObject(sql, new BeanPropertyRowMapper<>(Bruker.class), bruker.getNavn());
         try {
-            //TODO fikk ikke login til å poste error riktig
+            Bruker dbBruker = db.queryForObject(sql, new BeanPropertyRowMapper<>(Bruker.class), bruker.getNavn());
+            if (dbBruker != null) { // hvis navn finnes i det hele tatt
+                // husk å bruke matches, du kan ikke bruke equals her fordi lik input gir ikke lik output med encode
+                // matches funker fordi den finner og bruker samme salt som den den skjekker mot
+                // equals funker ikke fordi bCrypt bruker forskjellig salt på forskjellig input
+                return (dbBruker.getNavn().equals(bruker.getNavn()) && bCrypt.matches(bruker.getPassord(), dbBruker.getPassord()));
+            } else {
+                logger.error("Feil i repo login " );
+                return false;
+            }
 
-            // husk å bruke matches, du kan ikke bruke equals her fordi lik input gir ikke lik output med encode
-            return (dbBruker.getNavn().equals(bruker.getNavn()) && bCrypt.matches(bruker.getPassord(), dbBruker.getPassord()));
         } catch (Exception e) {
             logger.error("Feil i repo login " + e);
             return false;

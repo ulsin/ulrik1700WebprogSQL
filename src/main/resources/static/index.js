@@ -1,5 +1,3 @@
-//TODO fix input validation??
-
 $(() => {
     // console.log($.cookie('JSESIONID'));
 

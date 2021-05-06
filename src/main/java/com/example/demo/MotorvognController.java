@@ -37,7 +37,6 @@ public class MotorvognController {
     @PostMapping("/login")
     public void login(Bruker bruker, HttpServletResponse response) throws IOException {
         if (!repo.login(bruker)) { //her kjøres funksjonen for å teste, så trenger ikke kjøre den separat
-            //TODO sender ikke error riktig
             response.sendError(500, "Brukernavn eller passord stemte ikke");
         } else {
             session.setAttribute("innLogget", bruker);
@@ -63,6 +62,7 @@ public class MotorvognController {
 
     //TODO spør om dette??
     // Vet ikke helt hvor response argumentet kommer ifra, men er vel noe Spring gjør eller noe
+    // Svar: Spring gjør mye
     @PostMapping("/save")
     public void save(Motorvogn vogn, HttpServletResponse response) throws IOException {
 
