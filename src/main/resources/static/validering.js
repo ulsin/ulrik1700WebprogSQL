@@ -84,6 +84,7 @@ function validerBrukerNavn() {
 function validerPassord() {
     // const regexp = /^[a-zA-ZæøåÆØÅ. \-]{2,20}$/;
     //TODO finn ut hvorfor denne ikke funker
+    // gøy ny kommentar
     const regexp = /^(?=.*[A-ZÆØÅa-zøæå])(?=.*\d)[A-ZØÆÅa-zøæå\d]{8,}$/; //må ha tall!!!!! (og over 8)
     if (!regexp.test($("#passord").val())) {
         $("#passordError").html("Passord må være minst 8 tegn");
