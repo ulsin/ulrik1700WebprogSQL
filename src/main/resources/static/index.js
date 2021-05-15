@@ -19,11 +19,12 @@ $(() => {
         });
     });
 
+    // bra feil eksemel
     $("#registrer").click(() => {
         $.post("mVogn/sjekkBruker", () => {
             window.location.href = "/registrer.html";
         })
-            .fail(function (jqXHR) {
+            .fail(jqXHR => {
                 $("#feil").html($.parseJSON(jqXHR.responseText).message);
             });
     });

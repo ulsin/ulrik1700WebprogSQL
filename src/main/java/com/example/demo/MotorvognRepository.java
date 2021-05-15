@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public class MotorvognRepository {
 
-    @Autowired
+    @Autowired // Field injection not recomended?
     private JdbcTemplate db;
 
     private final Logger logger = LoggerFactory.getLogger(MotorvognRepository.class);
