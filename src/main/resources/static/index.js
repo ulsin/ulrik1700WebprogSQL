@@ -3,6 +3,14 @@ $(() => {
 
     visData() // henter data fra "server" når siden er lastet
 
+    $.get("/mVogn/sjekkBruker", (bool) => {
+        if (!bool) {
+            $("#logut").hide();
+        } else {
+            $("#login").hide();
+        }
+    })
+
     // venter på slett knappen
     $("#slettAlle").click(() => {
         $.get("/mVogn/sjekkBruker", (bool) => {
@@ -39,10 +47,12 @@ $(() => {
         });
     });
 
-    $("#encrypt").click(() => {
-        // do stuff
-        $.post("/mVogn/encrypt");
-    });
+    // auto encrypt
+    $.post("/mVogn/encrypt");
+
+    // $("#encrypt").click(() => {
+    //     // do stuff
+    // });
 
 });
 

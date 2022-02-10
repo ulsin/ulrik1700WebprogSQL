@@ -11,14 +11,16 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <a href="login.html" type="button" class="btn btn-primary">Log in</a>
-        <input type="button" id="logut" class="btn btn-danger" value="Log ut">
-        <input type="button" id="encrypt" class="btn btn-warning" value="Krypter Passord">
-    </div>
+    <nav class="navbar navbar-light col-md-10">
+        <a href="index.html" class="navbar-brand">Motorvogn Register</a>
+        <div class="ml-auto">
+        <a href="login.html" type="button" id="login" class="btn btn-primary mr-auto">Log in</a>
+        <input type="button" id="logut" class="btn btn-danger mr-auto" value="Log ut">
+        </div>
+<!--        <input type="button" id="encrypt" class="btn btn-warning" value="Krypter Passord">-->
+    </nav>
     <div class="row">
         <div class="col-md-10">
-            <h1>Registrerte Motorvogner</h1>
             <div id="utDiv"></div>
             <input type="button" id="registrer" class="btn btn-primary" value="Registrer">
             <input type="button" id="slettAlle" class="btn btn-danger" value="Slett Alle">
