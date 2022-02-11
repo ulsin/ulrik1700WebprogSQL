@@ -19,4 +19,4 @@ values ('18084781897', 'Takumi', 'Mt. Akina', '13-954', 'Toyota', 'Trueno'),
        ('23119993939', 'Keisuke', 'Saitama', '63-887', 'Mazda', 'RX7');
 
 insert into Bruker(navn, passord)
-values ('admin', 'password');
+values ('admin', 'password123');
