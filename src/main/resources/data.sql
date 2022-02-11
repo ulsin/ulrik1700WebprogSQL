@@ -14,9 +14,9 @@ values ('Volvo', 'V40'),
        ('Mazda', 'RX7');
 
 insert into Motorvogner(personNr, navn, adresse, regNr, merke, biltype)
-values ('AE861984SOY', 'Takumi', 'Mt. Akina', '13-954', 'Toyota', 'Trueno'),
-       ('dblEG6crshh', 'Shingo', 'Guardrail', '46-037', 'Honda', 'Civic'),
-       ('spoilerFD3S', 'Keisuke', 'Rotarytown', '63-887', 'Mazda', 'RX7');
+values ('18084781897', 'Takumi', 'Mt. Akina', '13-954', 'Toyota', 'Trueno'),
+       ('22019391322', 'Shingo', 'Kyoto', '46-037', 'Honda', 'Civic'),
+       ('23119993939', 'Keisuke', 'Saitama', '63-887', 'Mazda', 'RX7');
 
 insert into Bruker(navn, passord)
-values ('bunta', 'tofutofu86');
+values ('admin', 'password');
