@@ -21,8 +21,12 @@ public class MotorvognRepository {
     private final Logger logger = LoggerFactory.getLogger(MotorvognRepository.class);
     private final BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder(5); // strong enough
 
+    private boolean encrypted = false;
+
 
     public void passEncrypt() {
+        if (encrypted) return;
+
         String sql = "select * from Bruker";
 
         try {
@@ -33,6 +37,8 @@ public class MotorvognRepository {
                 // kunne ha brukt kryptering klassen men vil se om det funker yeet
                 db.update("update Bruker set passord =? where navn = ?", bCrypt.encode(b.getPassord()), b.getNavn());
             }
+
+            encrypted = true;
         } catch (Exception e) {
             logger.error("Feil i repo db encrypt " + e);
         }
